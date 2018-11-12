@@ -19,4 +19,5 @@
 
 - Template: `https://github.com/serverless/serverless/tree/master/lib/plugins/create/templates/aws-nodejs-typescript`
 - Docs: `https://serverless.com/framework/docs/`
+- Dev flow: `https://github.com/dherault/serverless-offline`
 
