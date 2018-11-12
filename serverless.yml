@@ -15,6 +15,9 @@ functions:
     handler: src/goodreads/request-token.handle
     memorySize: 128
     description: Api to get request-token for VirtualBookshelf app
+    environment:
+      GOODREADS_CLIENT_KEY: '${file(./env.yml):GOODREADS_CLIENT_KEY}'
+      GOODREADS_CLIENT_SECRET: '${file(./env.yml):GOODREADS_CLIENT_SECRET}'
     events:
       - http:
           path: virtual-bookshelf/v1/goodreads/request-token
