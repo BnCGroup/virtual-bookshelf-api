@@ -9,6 +9,12 @@
 1. Run `yarn deploy` or `serverless deploy` or `sls deploy`
 1. Test it out
 
+## Goodreads
+
+- Get your keys: `https://www.goodreads.com/api/keys`
+- OAuth info: `https://www.goodreads.com/api/oauth_example`
+- Node package: `https://github.com/bdickason/node-goodreads`
+
 ## Serverless Framework
 
 - Template: `https://github.com/serverless/serverless/tree/master/lib/plugins/create/templates/aws-nodejs-typescript`
