@@ -4,6 +4,11 @@
   "description": "Serverless webpack example using Typescript",
   "main": "handler.js",
   "license": "MIT",
+  "scripts": {
+    "deploy": "serverless deploy",
+    "update": "serverless deploy function -f goodreadsRequestToken",
+    "logs": "serverless logs -f goodreadsRequestToken -t"
+  },
   "dependencies": {
     "goodreads": "^0.1.0"
   },
