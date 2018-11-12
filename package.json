@@ -8,8 +8,8 @@
     "lint": "prettier -l '**/!(*.d).{ts,tsx}' && tslint --project tsconfig.json",
     "start": "serverless offline",
     "deploy": "serverless deploy",
-    "update": "serverless deploy function -f goodreadsRequestToken",
-    "logs": "serverless logs -f goodreadsRequestToken -t"
+    "update": "serverless deploy function -f goodreads",
+    "logs": "serverless logs -f goodreads -t"
   },
   "dependencies": {
     "goodreads": "^0.1.0"
