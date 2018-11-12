@@ -21,3 +21,6 @@
 - Docs: `https://serverless.com/framework/docs/`
 - Dev flow: `https://github.com/dherault/serverless-offline`
 
+## TODO
+
+- Custom domain: `https://serverless.com/blog/serverless-api-gateway-domain/`
