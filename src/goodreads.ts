@@ -8,7 +8,7 @@ export const handle: Handler = (
   cb: Callback,
 ) => {
   const goodreadsClient = Goodreads.client({
-    callback: event.queryStringParameters.callback,
+    callback: event.queryStringParameters.redirect,
     key: process.env.GOODREADS_CLIENT_KEY,
     secret: process.env.GOODREADS_CLIENT_SECRET,
   });
