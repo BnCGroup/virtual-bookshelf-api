@@ -42,24 +42,55 @@ export const handle: Handler = (
       break;
 
     case 'POST:/v1/goodreads/access-token':
-      goodreadsClient.processCallback((result, status?: number) => {
-        if (status === 500) {
-          return cb(null, {
-            body: JSON.stringify({
-              message: result,
-            }),
-            statusCode: 500,
-          });
-        }
+      const requestBody = JSON.parse(event.body);
 
-        cb(null, {
+      if (
+        !requestBody ||
+        !requestBody.oauthToken ||
+        !requestBody.oauthTokenSecret ||
+        !requestBody.authorized
+      ) {
+        return cb(null, {
           body: JSON.stringify({
-            _result: result,
-            message: 'Access Token Retrieved',
+            message:
+              'JSON body is required with `authorized`, `oauthToken`, and `oauthTokenSecret` keys',
           }),
-          statusCode: 200,
+          statusCode: 400,
         });
-      });
+      }
+
+      if (requestBody.authorized.toString() !== '1') {
+        return cb(null, {
+          body: JSON.stringify({
+            message: 'You were not authorized',
+          }),
+          statusCode: 400,
+        });
+      }
+
+      goodreadsClient.processCallback(
+        requestBody.oauthToken,
+        requestBody.oauthTokenSecret,
+        requestBody.authorized,
+        (result, status?: number) => {
+          if (status === 500) {
+            return cb(null, {
+              body: JSON.stringify({
+                message: result,
+              }),
+              statusCode: 500,
+            });
+          }
+
+          cb(null, {
+            body: JSON.stringify({
+              message: 'Access Token Retrieved',
+              result,
+            }),
+            statusCode: 200,
+          });
+        },
+      );
       break;
     default:
       cb(null, {
