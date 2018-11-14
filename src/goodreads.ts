@@ -1,6 +1,9 @@
 import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda';
 
-import Goodreads from 'goodreads';
+import IOptions from './ioptions';
+
+import getAccessToken from './services/get-access-token';
+import getRequestToken from './services/get-request-token';
 
 export const handle: Handler = (
   event: APIGatewayEvent,
@@ -10,91 +13,31 @@ export const handle: Handler = (
   event.queryStringParameters = event.queryStringParameters || {};
   event.body = event.body || '{}';
 
-  const goodreadsClient = Goodreads.client({
-    callback: event.queryStringParameters.redirect,
-    key: process.env.GOODREADS_CLIENT_KEY,
-    secret: process.env.GOODREADS_CLIENT_SECRET,
-  });
+  const options: IOptions = {
+    clientKey: process.env.GOODREADS_CLIENT_KEY,
+    clientSecret: process.env.GOODREADS_CLIENT_SECRET,
+    redirectUri: event.queryStringParameters.redirect,
+
+    baseUrl: 'https://goodreads.com',
+    oauthEncryption: 'HMAC-SHA1',
+    oauthVersion: '1.0',
+
+    accessTokenUrlPath: '/oauth/access_token',
+    requestTokenUrlPath: '/oauth/request_token',
+  };
 
   switch (
     `${event.requestContext.httpMethod.toUpperCase()}:${event.requestContext.resourcePath.toLowerCase()}`
   ) {
     case 'POST:/v1/goodreads/request-token':
-      goodreadsClient.requestToken((result, status?: number) => {
-        if (status === 500) {
-          return cb(null, {
-            body: JSON.stringify({
-              message: result,
-            }),
-            statusCode: 500,
-          });
-        }
-
-        cb(null, {
-          body: JSON.stringify({
-            message: 'Request Token Retrieved',
-            result: {
-              authorizeUrl: result.url,
-              oauthToken: result.oauthToken,
-              oauthTokenSecret: result.oauthTokenSecret,
-            },
-          }),
-          statusCode: 200,
-        });
-      });
+      getRequestToken(options, event, context, cb);
       break;
 
     case 'POST:/v1/goodreads/access-token':
-      const requestBody = JSON.parse(event.body);
-
-      if (
-        !requestBody ||
-        !requestBody.oauthToken ||
-        !requestBody.oauthTokenSecret ||
-        !requestBody.authorized
-      ) {
-        return cb(null, {
-          body: JSON.stringify({
-            message:
-              'JSON body is required with `authorized`, `oauthToken`, and `oauthTokenSecret` keys',
-          }),
-          statusCode: 400,
-        });
-      }
-
-      if (requestBody.authorized.toString() !== '1') {
-        return cb(null, {
-          body: JSON.stringify({
-            message: 'You were not authorized',
-          }),
-          statusCode: 400,
-        });
-      }
-
-      goodreadsClient.processCallback(
-        requestBody.oauthToken,
-        requestBody.oauthTokenSecret,
-        requestBody.authorized,
-        (result, status?: number) => {
-          if (status === 500) {
-            return cb(null, {
-              body: JSON.stringify({
-                message: result,
-              }),
-              statusCode: 500,
-            });
-          }
-
-          cb(null, {
-            body: JSON.stringify({
-              message: 'Access Token Retrieved',
-              result,
-            }),
-            statusCode: 200,
-          });
-        },
-      );
+      getAccessToken(options, event, context, cb);
       break;
+
+
     default:
       cb(null, {
         body: JSON.stringify({

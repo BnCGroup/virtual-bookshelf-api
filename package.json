@@ -12,11 +12,14 @@
     "logs": "serverless logs -f goodreads -t"
   },
   "dependencies": {
-    "goodreads": "^0.1.0"
+    "oauth": "^0.9.15",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.1",
     "@types/node": "^8.0.57",
+    "@types/oauth": "^0.9.1",
+    "@types/xml2js": "^0.4.3",
     "precise-commits": "^1.0.2",
     "prettier": "1.15.1",
     "serverless": "^1.32.0",
