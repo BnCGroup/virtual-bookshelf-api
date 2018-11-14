@@ -3,6 +3,7 @@ import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda';
 import IOptions from './ioptions';
 
 import getAccessToken from './services/get-access-token';
+import getAuthUser from './services/get-auth-user';
 import getRequestToken from './services/get-request-token';
 
 export const handle: Handler = (
@@ -37,6 +38,9 @@ export const handle: Handler = (
       getAccessToken(options, event, context, cb);
       break;
 
+    case 'POST:/v1/goodreads/me':
+      getAuthUser(options, event, context, cb);
+      break;
 
     default:
       cb(null, {

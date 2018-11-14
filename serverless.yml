@@ -26,3 +26,6 @@ functions:
       - http:
           path: v1/goodreads/access-token
           method: post
+      - http:
+          path: v1/goodreads/me
+          method: get
