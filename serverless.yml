@@ -28,4 +28,4 @@ functions:
           method: post
       - http:
           path: v1/goodreads/me
-          method: get
+          method: post

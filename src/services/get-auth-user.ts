@@ -32,8 +32,8 @@ export default function getAuthUser(
   const oa = new OAuth(
     `${options.baseUrl}${options.requestTokenUrlPath}`,
     `${options.baseUrl}${options.accessTokenUrlPath}`,
+    options.clientKey,
     options.clientSecret,
-    options.oauthVersion,
     options.oauthVersion,
     options.redirectUri,
     options.oauthEncryption,
@@ -55,17 +55,26 @@ export default function getAuthUser(
 
       const parser = new Xml2Js.Parser();
 
-      parser.parseString(data.toString());
-
       parser.on('end', result => {
+        const user = result.GoodreadsResponse.user[0];
+
         cb(null, {
           body: JSON.stringify({
             message: 'User Retrieved',
-            result,
+            result: {
+              user: {
+                id: user.$.id,
+                name: user.name[0],
+
+                link: user.link[0],
+              },
+            },
           }),
           statusCode: 200,
         });
       });
+
+      parser.parseString(data.toString());
     },
   );
 }
