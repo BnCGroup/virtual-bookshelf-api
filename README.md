@@ -24,3 +24,6 @@
 ## TODO
 
 - Custom domain: `https://serverless.com/blog/serverless-api-gateway-domain/`
+- GraphQL: `https://github.com/serverless/serverless-graphql`
+- OAuth2 Server: Auth0? DynamoDB backed?
+  - This would just make mobile auth easier to deal with. And lock it down a bit more
