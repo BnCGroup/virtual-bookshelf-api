@@ -29,3 +29,6 @@ functions:
       - http:
           path: v1/goodreads/me
           method: post
+      - http:
+          path: v1/goodreads/books/owned
+          method: post
